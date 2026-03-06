@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Name — AI/ML Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+  <style>
+    /* ─── DESIGN TOKENS ─────────────────────────────────── */
+    :root {
+      --bg:       #f7f6f3;
+      --surface:  #ffffff;
+      --border:   #e4e2dc;
+      --text:     #1a1916;
+      --muted:    #8a8780;
+      --accent:   #2d6a4f;       /* deep moss green — calm, technical */
+      --accent2:  #e9c46a;       /* warm gold accent */
+      --mono:     'DM Mono', monospace;
+      --sans:     'DM Sans', sans-serif;
+      --radius:   6px;
+      --max:      720px;
+    }
+
+    /* ─── RESET ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ─── LAYOUT ─────────────────────────────────────────── */
+    .container {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ─── NAV ────────────────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(247,246,243,0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--accent);
+    }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--muted);
+      letter-spacing: 0.03em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ─── HERO ───────────────────────────────────────────── */
+    #hero {
+      padding: 100px 0 80px;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-tag {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.1s;
+    }
+    .hero-name {
+      font-size: clamp(2.4rem, 6vw, 3.6rem);
+      font-weight: 300;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.2s;
+    }
+    .hero-name strong {
+      font-weight: 500;
+    }
+    .hero-bio {
+      font-size: 17px;
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 520px;
+      margin-bottom: 36px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.35s;
+    }
+    .hero-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.5s;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 18px;
+      border-radius: var(--radius);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-primary:hover { background: #235c41; }
+    .btn-outline {
+      border: 1px solid var(--border);
+      color: var(--text);
+      background: var(--surface);
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ─── SECTION SHARED ─────────────────────────────────── */
+    section { padding: 72px 0; border-bottom: 1px solid var(--border); }
+    .section-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 40px;
+    }
+
+    /* ─── ABOUT ──────────────────────────────────────────── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+    }
+    .about-text p {
+      color: var(--muted);
+      font-weight: 300;
+      margin-bottom: 16px;
+    }
+    .about-text p:last-child { margin-bottom: 0; }
+    .skills-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .skill-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--mono);
+      font-size: 13px;
+    }
+    .skill-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* ─── PROJECTS ───────────────────────────────────────── */
+    .projects-grid {
+      display: grid;
+      gap: 16px;
+    }
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .project-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .project-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .project-title {
+      font-size: 16px;
+      font-weight: 500;
+    }
+    .project-links { display: flex; gap: 10px; }
+    .project-link {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      padding: 4px 8px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .project-link:hover { color: var(--accent); border-color: var(--accent); }
+    .project-desc {
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 300;
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 3px 9px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      color: var(--muted);
+    }
+
+    /* ─── EXPERIENCE ─────────────────────────────────────── */
+    .timeline { display: flex; flex-direction: column; gap: 0; }
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 24px;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .timeline-item:last-child { border-bottom: none; }
+    .timeline-date {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      padding-top: 2px;
+    }
+    .timeline-role { font-weight: 500; font-size: 15px; margin-bottom: 2px; }
+    .timeline-org { font-size: 13px; color: var(--accent); margin-bottom: 8px; }
+    .timeline-desc { font-size: 14px; color: var(--muted); font-weight: 300; }
+
+    /* ─── CONTACT ────────────────────────────────────────── */
+    #contact { border-bottom: none; }
+    .contact-inner {
+      max-width: 480px;
+    }
+    .contact-heading {
+      font-size: 2rem;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      margin-bottom: 14px;
+    }
+    .contact-sub {
+      color: var(--muted);
+      font-weight: 300;
+      margin-bottom: 28px;
+      font-size: 15px;
+    }
+    .contact-links { display: flex; flex-direction: column; gap: 10px; }
+    .contact-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+    }
+    .contact-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      width: 72px;
+      flex-shrink: 0;
+    }
+    .contact-value {
+      color: var(--text);
+      transition: color 0.2s;
+    }
+    .contact-value:hover { color: var(--accent); }
+
+    /* ─── FOOTER ─────────────────────────────────────────── */
+    footer {
+      padding: 32px 0;
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ─── ANIMATIONS ─────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .about-grid { grid-template-columns: 1fr; gap: 32px; }
+      .timeline-item { grid-template-columns: 1fr; gap: 4px; }
+      .nav-links { gap: 16px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="container">
+      <span class="nav-logo">your.name</span>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="container">
+      <p class="hero-tag">AI/ML · MSc Computing</p>
+      <h1 class="hero-name">
+        Hi, I'm <strong>Your Name</strong> —<br>
+        building intelligent systems.
+      </h1>
+      <p class="hero-bio">
+        Master's student specialising in AI/ML. I work at the intersection of
+        machine learning, software engineering, and practical problem-solving.
+      </p>
+      <div class="hero-links">
+        <a href="#projects" class="btn btn-primary">View my work</a>
+        <a href="https://github.com/yourusername" target="_blank" class="btn btn-outline">
+          <!-- GitHub icon -->
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          GitHub
+        </a>
+        <a href="mailto:you@email.com" class="btn btn-outline">Email me</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <p class="section-label reveal">About</p>
+      <div class="about-grid reveal">
+        <div class="about-text">
+          <p>
+            I'm a Master's student in Computing with a specialisation in AI,
+            focused on building systems that are both technically rigorous and
+            practically useful.
+          </p>
+          <p>
+            My interests span machine learning, NLP, and the engineering
+            behind deploying models into real-world products.
+          </p>
+          <p>
+            Outside of coursework I'm building projects that sharpen my
+            engineering skills and deepen my understanding of modern AI systems.
+          </p>
+        </div>
+        <div>
+          <div class="skills-list">
+            <div class="skill-item"><span class="skill-dot"></span>Python · PyTorch · scikit-learn</div>
+            <div class="skill-item"><span class="skill-dot"></span>Machine Learning · NLP · CV</div>
+            <div class="skill-item"><span class="skill-dot"></span>Data Analysis · Pandas · NumPy</div>
+            <div class="skill-item"><span class="skill-dot"></span>Git · Docker · Linux</div>
+            <div class="skill-item"><span class="skill-dot"></span>SQL · REST APIs</div>
+            <div class="skill-item"><span class="skill-dot"></span>LaTeX · Research writing</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="container">
+      <p class="section-label reveal">Projects</p>
+      <div class="projects-grid">
+
+        <div class="project-card reveal">
+          <div class="project-header">
+            <h3 class="project-title">Project Title One</h3>
+            <div class="project-links">
+              <a href="#" class="project-link">GitHub →</a>
+              <a href="#" class="project-link">Demo →</a>
+            </div>
+          </div>
+          <p class="project-desc">
+            One to two sentences describing what the project does and why it's
+            interesting. Focus on the problem solved, not the tech stack.
+          </p>
+          <div class="project-tags">
+            <span class="tag">PyTorch</span>
+            <span class="tag">NLP</span>
+            <span class="tag">Transformers</span>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div class="project-header">
+            <h3 class="project-title">Project Title Two</h3>
+            <div class="project-links">
+              <a href="#" class="project-link">GitHub →</a>
+            </div>
+          </div>
+          <p class="project-desc">
+            Brief description of what the project does. What was the challenge?
+            What did you learn or build?
+          </p>
+          <div class="project-tags">
+            <span class="tag">Python</span>
+            <span class="tag">scikit-learn</span>
+            <span class="tag">Pandas</span>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div class="project-header">
+            <h3 class="project-title">Project Title Three</h3>
+            <div class="project-links">
+              <a href="#" class="project-link">GitHub →</a>
+            </div>
+          </div>
+          <p class="project-desc">
+            A third project. Even course projects or personal experiments
+            count — what matters is demonstrating your thinking.
+          </p>
+          <div class="project-tags">
+            <span class="tag">Computer Vision</span>
+            <span class="tag">OpenCV</span>
+            <span class="tag">FastAPI</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="container">
+      <p class="section-label reveal">Experience</p>
+      <div class="timeline reveal">
+
+        <div class="timeline-item">
+          <span class="timeline-date">2024 — now</span>
+          <div>
+            <p class="timeline-role">MSc Computing (AI)</p>
+            <p class="timeline-org">Your University</p>
+            <p class="timeline-desc">
+              Coursework in machine learning, deep learning, NLP, and
+              computer vision. Dissertation topic: [your topic here].
+            </p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <span class="timeline-date">2023</span>
+          <div>
+            <p class="timeline-role">Previous Role or Degree</p>
+            <p class="timeline-org">Organisation / University</p>
+            <p class="timeline-desc">
+              Brief description. What did you do? What did you contribute?
+            </p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <span class="timeline-date">2022</span>
+          <div>
+            <p class="timeline-role">Another Role or Project</p>
+            <p class="timeline-org">Organisation</p>
+            <p class="timeline-desc">
+              A short description of what you worked on.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-inner reveal">
+        <h2 class="contact-heading">Let's talk.</h2>
+        <p class="contact-sub">
+          Open to research collaborations, internships, and interesting
+          problems. Feel free to reach out.
+        </p>
+        <div class="contact-links">
+          <div class="contact-row">
+            <span class="contact-label">EMAIL</span>
+            <a href="mailto:you@email.com" class="contact-value">you@email.com</a>
+          </div>
+          <div class="contact-row">
+            <span class="contact-label">GITHUB</span>
+            <a href="https://github.com/yourusername" target="_blank" class="contact-value">github.com/yourusername</a>
+          </div>
+          <div class="contact-row">
+            <span class="contact-label">LINKEDIN</span>
+            <a href="https://linkedin.com/in/yourprofile" target="_blank" class="contact-value">linkedin.com/in/yourprofile</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      built by hand · <span id="year"></span>
+    </div>
+  </footer>
+
+  <script>
+    // ── Set current year in footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ── Scroll-reveal animation
+    // IntersectionObserver watches elements with class "reveal"
+    // When they enter the viewport, it adds "visible" which triggers the CSS transition
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target); // only animate once
+          }
+        });
+      },
+      { threshold: 0.12 } // trigger when 12% of element is visible
+    );
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
