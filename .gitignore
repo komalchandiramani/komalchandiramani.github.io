@@ -7,5 +7,5 @@
 skills-lock.json
 
 # Raw source assets (kept locally, not needed by the live site)
-logos/
+/logos/
 photos/photo.jpg
