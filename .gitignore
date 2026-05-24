@@ -1,0 +1,11 @@
+# OS junk
+.DS_Store
+
+# Claude Code tooling — not part of the website
+.claude/
+.agents/
+skills-lock.json
+
+# Raw source assets (kept locally, not needed by the live site)
+logos/
+photos/photo.jpg
